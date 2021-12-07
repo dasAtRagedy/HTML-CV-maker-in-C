@@ -2,6 +2,7 @@
 
 void handleArgs(int argc, char *argv[])
 {
+    return;
 }
 
 int main(int argc, char *argv[])
