@@ -2,6 +2,7 @@
 
 void handleArgs(int argc, char *argv[])
 {
+    argc = argc;
     return;
 }
 
