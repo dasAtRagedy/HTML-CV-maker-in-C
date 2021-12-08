@@ -45,11 +45,23 @@ int main(int argc, char *argv[])
         system("cls");
         switch (option)
         {
+        case MAIN_INFO:
+            break;
+        case CREATE_SECTION:
+            break;
+        case VIEW_SECTIONS:
+            break;
+        case SWITCH_SECTION:
+            break;
+        case DELETE_SECTION:
+            break;
+        case SAVE:
+            break;
         case EXIT:
             break;
-
         default:
-            break;
+            printf("Bad input provided. Try again.\n");
+            fflush(stdin);
         }
     } while (option != EXIT);
 
