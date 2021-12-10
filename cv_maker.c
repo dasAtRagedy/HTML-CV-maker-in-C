@@ -44,13 +44,13 @@ void printMainOptions()
 }
 
 void initialize_html();
-void main_section(Category categories[], int *section_count);
+void main_section(Category *categories, int *section_count);
 void create_section(Category **categories, int *section_count, int *capacity);
-void view_sections(Category categories[], int *section_count);
-void switch_section(Category categories[], int *section_count);
+void view_sections(Category *categores, int section_count);
+void switch_section(Category categories[], int section_count);
 void delete_section(Category categories[], int *section_count);
 void save(Category categories[], int *section_count);
-void exitProgram(Category categories[], int *section_count);
+void exitProgram(Category *categories, int section_count);
 int section_select(Category categories[], FILE *fin, int section_count);    //utility function to get the id of member
 
 int main()
@@ -65,6 +65,10 @@ int main()
         printf("Please select option number\n");
         printMainOptions();
         scanf("%d", &option);
+        if(getchar() != '\n')
+        {
+            option = -1;
+        }
         system("cls");
         switch (option)
         {
@@ -95,7 +99,6 @@ int main()
 
 void create_section(Category ** categories, int *section_count, int *capacity)
 {
-    fflush(stdin);
     printf("Input the name of your section (up to 50 symbols): ");
     if(*section_count == *capacity)
     {
