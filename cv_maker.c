@@ -44,7 +44,7 @@ void printMainOptions()
 }
 
 void initialize_html();
-void manage_main_info(Main_data *user_data);
+void manage_main_info(Main_data user_data);
 void create_section(Category **categories, int *section_count, int *capacity);
 void view_sections(Category *categores, int section_count);
 void switch_section(Category *categories, int section_count);
@@ -75,7 +75,7 @@ int main()
         switch (option)
         {
         case MAIN_INFO:
-            manage_main_info(&user_data);
+            manage_main_info(user_data);
             printf ("%s\nparasiau", user_data.name_surname);
             break;
         case CREATE_SECTION:
@@ -100,7 +100,7 @@ int main()
     return 0;
 }
 
-void manage_main_info(Main_data *user_data)
+void manage_main_info(Main_data user_data)
 {
     char bufferis[267];
     printf("Please enter your name, surname and second name up to 50 symbols, if you have one\n");
@@ -112,10 +112,10 @@ void manage_main_info(Main_data *user_data)
         scanf("%267[^\n]", bufferis);
         c=getchar();
     }
-
-    strcpy(user_data->name_surname, bufferis);
-
-    printf ("%s\n", user_data->name_surname);
+    for (int i=0; i<strlen(bufferis); i++){
+        user_data.name_surname[i]=bufferis[i];
+    }
+    printf ("%s\n", user_data.name_surname);
     //name and surname done
     printf("Please enter your birth date in yyyy-mm-dd format\n");
 }
