@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         handleArgs(argc, argv);
     }
 
-    printf("Simple CV maker by: Denisas Savickis, Rytis Sapka, Simas Jarukaitis, Deividas Bartuska\n");
+    printf("Simple CV maker by: Denisas Savickis, Rytis Sapka, Simas Jarukaitis, Deividas Baltuska\n");
     int option = 0;
     do
     {
