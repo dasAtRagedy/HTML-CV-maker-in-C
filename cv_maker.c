@@ -1,10 +1,22 @@
 #include <stdio.h>
 
-void handleArgs(int argc, char *argv[])
+typedef struct
 {
-    argc = argc;
-    return;
-}
+    char name[50];
+    char html_text[50][256];
+} Category;
+
+typedef struct
+{
+    char name_surname[50];
+    char birth_data[11]; //yyyy-mm-dd
+    int how_old;
+    char e_mail[100];
+    char phone_number[13]; //12 numbers +\n if we use +370 format
+    char linkedIn_link[100];
+} Main_data;
+
+void manage_main_info();
 
 enum options
 {
@@ -29,23 +41,21 @@ void printMainOptions()
     printf("%s", "Your choice: ");
 }
 
-int main(int argc, char *argv[])
+int main()
 {
-    if (argc > 1)
-    {
-        handleArgs(argc, argv);
-    }
-
-    printf("Simple CV maker by: Denisas Savickis, Rytis Sapka, Simas Jarukaitis, Deividas Baltuska\n");
+    Category categories[15];
+    printf("Simple CV maker by: Denisas Savickis, Rytis Sapka, Simonas Jarukaitis, Deividas Baltuska\n");
     int option = 0;
     do
     {
+        printf("Please select option number\n");
         printMainOptions();
         scanf("%d", &option);
         system("cls");
         switch (option)
         {
         case MAIN_INFO:
+           // manage_main_info();
             break;
         case CREATE_SECTION:
             break;
