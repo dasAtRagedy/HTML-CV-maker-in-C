@@ -47,10 +47,10 @@ void initialize_html();
 void main_section(Category *categories, int *section_count);
 void create_section(Category **categories, int *section_count, int *capacity);
 void view_sections(Category *categores, int section_count);
-void switch_section(Category categories[], int section_count);
-void delete_section(Category categories[], int *section_count);
-void save(Category categories[], int *section_count);
-void exitProgram(Category *categories, int section_count);
+void switch_section(Category *categories, int section_count);
+void delete_section(Category **categories[], int *section_count);
+void save(Category *categories, int section_count);
+void exitProgram(Category **categories, int section_count);
 int section_select(Category categories[], FILE *fin, int section_count);    //utility function to get the id of member
 
 int main()
