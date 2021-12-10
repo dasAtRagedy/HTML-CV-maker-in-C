@@ -41,6 +41,16 @@ void printMainOptions()
     printf("%s", "Your choice: ");
 }
 
+void initialize_html(Category categories[], FILE *fin, int section_count);
+void main_section(Category categories[], FILE *fin, int section_count);
+void create_section(Category categories[], FILE *fin, int section_count);
+void view_sections(Category categories[], FILE *fin, int section_count);
+void switch_section(Category categories[], FILE *fin, int section_count);
+void delete_section(Category categories[], FILE *fin, int section_count);
+void save(Category categories[], FILE *fin, int section_count);
+void exit(Category categories[], FILE *fin, int section_count);
+int section_select(Category categories[], FILE *fin, int section_count);    //utility function to get the id of member
+
 int main()
 {
     Category categories[15];
