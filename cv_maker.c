@@ -58,8 +58,6 @@ void delete_section(Category **categories[], int *section_count);
 
 void save(Category *categories, int section_count);
 void exitProgram(Category **categories, int section_count);
-//utility function to get the id of member
-int section_select(Category categories[], FILE *fin, int section_count);
 
 int main()
 {
