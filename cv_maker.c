@@ -55,6 +55,7 @@ int section_select(Category categories[], FILE *fin, int section_count);    //ut
 
 int main()
 {
+    //komwnrEa
     Category * categories = (Category *)malloc(sizeof(Category));
     int section_count = 0;
     int capacity = 1;
