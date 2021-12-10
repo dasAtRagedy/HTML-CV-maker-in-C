@@ -11,7 +11,7 @@ typedef struct
 typedef struct
 {
     char name_surname[50];
-    char birth_data[11]; //yyyy-mm-dd
+    char birth_date[11]; //yyyy-mm-dd
     int how_old;
     char e_mail[100];
     char phone_number[13]; //12 numbers +\n if we use +370 format
@@ -44,7 +44,7 @@ void printMainOptions()
 }
 
 void initialize_html();
-void main_section(Category *categories, int *section_count);
+void manage_main_info(Main_data user_data);
 void create_section(Category **categories, int *section_count, int *capacity);
 void view_sections(Category *categores, int section_count);
 void switch_section(Category *categories, int section_count);
@@ -55,14 +55,15 @@ int section_select(Category categories[], FILE *fin, int section_count);    //ut
 
 int main()
 {
-    //komwnrEa
     Category * categories = (Category *)malloc(sizeof(Category));
+    Main_data user_data;
     int section_count = 0;
     int capacity = 1;
     printf("Simple CV maker by: Denisas Savickis, Rytis Sapka, Simonas Jarukaitis, Deividas Baltuska\n");
     int option = 0;
     do
     {
+
         printf("Please select option number\n");
         printMainOptions();
         scanf("%d", &option);
@@ -74,7 +75,8 @@ int main()
         switch (option)
         {
         case MAIN_INFO:
-           // manage_main_info();
+            manage_main_info(user_data);
+            printf ("%s\nparasiau", user_data.name_surname);
             break;
         case CREATE_SECTION:
             create_section(&categories, &section_count, &capacity);
@@ -96,6 +98,26 @@ int main()
     } while (option != EXIT);
 
     return 0;
+}
+
+void manage_main_info(Main_data user_data)
+{
+    char bufferis[267];
+    printf("Please enter your name, surname and second name up to 50 symbols, if you have one\n");
+    scanf("%267[^\n]", bufferis);
+    char c;
+    c=getchar();
+    while (strlen(bufferis)>50){
+        printf("sorry, I expected at most 50 symbols.\nPlease enter your name and surname again\n");
+        scanf("%267[^\n]", bufferis);
+        c=getchar();
+    }
+    for (int i=0; i<strlen(bufferis); i++){
+        user_data.name_surname[i]=bufferis[i];
+    }
+    printf ("%s\n", user_data.name_surname);
+    //name and surname done
+    printf("Please enter your birth date in yyyy-mm-dd format\n");
 }
 
 void create_section(Category ** categories, int *section_count, int *capacity)
