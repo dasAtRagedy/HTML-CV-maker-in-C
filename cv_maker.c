@@ -32,17 +32,7 @@ enum options
     EXIT
 };
 
-void printMainOptions()
-{
-    printf("%d) %s\n", MAIN_INFO, "Fill out your main information");
-    printf("%d) %s\n", CREATE_SECTION, "Create a new section");
-    printf("%d) %s\n", VIEW_SECTIONS, "View all sections");
-    printf("%d) %s\n", SWITCH_SECTION, "Switch two sections");
-    printf("%d) %s\n", DELETE_SECTION, "Delete a section");
-    printf("%d) %s\n", SAVE, "Save your CV");
-    printf("%d) %s\n", EXIT, "Exit");
-    printf("%s", "Your choice: ");
-}
+void printMainOptions();
 
 void initialize_html();
 void main_section(Category *categories, int *section_count);
@@ -54,7 +44,8 @@ void view_sections(Category *categories, int section_count);
 void switch_section(Category **categories, int section_count);
 void swap_elements(Category **categories, int first, int second);
 
-void delete_section(Category **categories[], int *section_count);
+void delete_section(Category **categories, int *section_count);
+void erase_element(Category **categories, int *section_count, int pos);
 
 void save(Category *categories, int section_count);
 void exitProgram(Category **categories, int section_count);
@@ -95,6 +86,7 @@ int main()
                 switch_section(&categories, section_count);
             break;
         case DELETE_SECTION:
+            delete_section(&categories, &section_count);
             break;
         case SAVE:
             break;
@@ -109,22 +101,35 @@ int main()
     return 0;
 }
 
+void printMainOptions()
+{
+    printf("%d) %s\n", MAIN_INFO, "Fill out your main information");
+    printf("%d) %s\n", CREATE_SECTION, "Create a new section");
+    printf("%d) %s\n", VIEW_SECTIONS, "View all sections");
+    printf("%d) %s\n", SWITCH_SECTION, "Switch two sections");
+    printf("%d) %s\n", DELETE_SECTION, "Delete a section");
+    printf("%d) %s\n", SAVE, "Save your CV");
+    printf("%d) %s\n", EXIT, "Exit");
+    printf("%s", "Your choice: ");
+}
+
 void create_section(Category **categories, int *section_count, int *capacity)
 {
+    //DADEDAMA VIETOS I DINAMINI MASYVA
     printf("Input the name of your section (up to 50 symbols): ");
     if(*section_count == *capacity)
     {
         *capacity *= 2;
         *categories = realloc(*categories, *capacity * sizeof(Category));
     }
+    //TODO: FIX SUS VALIDACIJA
     scanf("%50[^\n]", (*categories)[*section_count].name);
-    /* clear remaining symbols in line */
     scanf("%*[^\n]");
     getc(stdin);
     for (int i = 0; i < 49; ++i)
     {
+        //TODO: FIX SUS VALIDACIJA
         printf("Input line %d of text (up to 256 symbols, 'N' to finish)\n: ", i + 1);
-        /* clear remaining symbols in line */
         scanf("%256[^\n]", (*categories)[*section_count].html_text[i]);
         scanf("%*[^\n]");
         getc(stdin);
@@ -137,6 +142,7 @@ void create_section(Category **categories, int *section_count, int *capacity)
     system("cls");
 }
 
+//UTILITY
 void print_all_sections(Category *categories, int section_count)
 {
     for (int i = 0; i < section_count; ++i)
@@ -162,8 +168,8 @@ void switch_section(Category **categories, int section_count)
     {
         correct_input = true;
         print_all_sections(*categories, section_count);
+        //TODO: FIX SUS VALIDACIJA
         printf("Input exactly 2 numbers seperated by a space - the id's of elements you wish to swap.\n");
-        int first, second;
         printf("Input the id of the first element you wish to swap: ");
         scanf("%d", &mem_one);
         if (getchar() != '\n' || mem_one <= 0 || mem_one > section_count)
@@ -190,10 +196,46 @@ void switch_section(Category **categories, int section_count)
     swap_elements(categories, mem_one - 1, mem_two - 1);
 }
 
+//UTILITY
 void swap_elements(Category **categories, int first, int second)
 {
     Category temporary;
     temporary = (*categories)[first];
     (*categories)[first] = (*categories)[second];
     (*categories)[second] = temporary;
+}
+
+void delete_section(Category **categories, int *section_count)
+{
+    int mem_one;
+    bool correct_input = true;
+    do
+    {
+        //TODO: FIX SUS VALIDACIJA
+        correct_input = true;
+        print_all_sections(*categories, *section_count);
+        printf("Input the id of section, that you wish to delete: ");
+        scanf("%d", &mem_one);
+        if (getchar() != '\n' || mem_one <= 0 || mem_one > section_count)
+        {
+            correct_input = false;
+        }
+        system("cls");
+        if(!correct_input)
+        {
+            printf("Incorrect input! Try again.\n");
+            fflush(stdin);
+        }
+    }
+    while (correct_input == 0);
+    erase_element(categories, section_count, mem_one - 1);
+}
+
+void erase_element(Category **categories, int *section_count, int pos)
+{
+    for (int i = pos; i < *section_count; ++i)
+    {
+        (*categories)[i] = (*categories)[i + 1];
+    }
+    (*section_count)--;
 }
