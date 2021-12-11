@@ -52,6 +52,7 @@ void delete_section(Category **categories[], int *section_count);
 void save(Category *categories, int section_count);
 void exitProgram(Category **categories, int section_count);
 int section_select(Category categories[], FILE *fin, int section_count);    //utility function to get the id of member
+int num_validate();
 
 int main()
 {
@@ -76,7 +77,6 @@ int main()
         {
         case MAIN_INFO:
             manage_main_info(&user_data);
-            printf ("%s\nparasiau", user_data.name_surname);
             break;
         case CREATE_SECTION:
             create_section(&categories, &section_count, &capacity);
@@ -95,29 +95,67 @@ int main()
             printf("Bad input provided. Try again.\n");
             fflush(stdin);
         }
-    } while (option != EXIT);
+    }
+    while (option != EXIT);
 
     return 0;
 }
 
 void manage_main_info(Main_data *user_data)
 {
-    char bufferis[267];
+    char bufferis[257];
     printf("Please enter your name, surname and second name up to 50 symbols, if you have one\n");
-    scanf("%267[^\n]", bufferis);
+    scanf("%256[^\n]", bufferis);
     char c;
-    c=getchar();
+    c = getchar();
     while (strlen(bufferis)>50){
         printf("sorry, I expected at most 50 symbols.\nPlease enter your name and surname again\n");
-        scanf("%267[^\n]", bufferis);
-        c=getchar();
+        scanf("%256[^\n]", bufferis);
+        c = getchar();
     }
-
     strcpy(user_data->name_surname, bufferis);
-
-    printf ("%s\n", user_data->name_surname);
-    //name and surname done
     printf("Please enter your birth date in yyyy-mm-dd format\n");
+    scanf("%256[^\n]", bufferis);
+    c = getchar();
+    int is_date_format_good=0;
+    while (!is_date_format_good){
+        if (strlen(bufferis)!=10){
+            printf("sorry, I expected 10 numbers\nPlease enter birth date in yyyy-mm-dd format\n");
+            scanf("%256[^\n]",bufferis);
+            c = getchar();
+        }
+        else if (bufferis[4]!='-'||bufferis[7]!='-'||!isdigit(bufferis[0])||!isdigit(bufferis[1])||!isdigit(bufferis[2])||!isdigit(bufferis[3])||!isdigit(bufferis[5])||!isdigit(bufferis[6])||!isdigit(bufferis[8])||!isdigit(bufferis[9])){
+            printf("sorry, that was not correct birth date format\nPlease enter birth date in yyyy-mm-dd format\n");
+            scanf("%256[^\n]",bufferis);
+            c = getchar();
+        }
+        else{
+            is_date_format_good=1;
+        }
+    }
+    strcpy(user_data->birth_date, bufferis);
+    printf("Please enter, how old are you\n");
+    int number=num_validate();
+    user_data->how_old=number;
+    printf("Please enter your email\n"); //there is no regex in c (I think), so there won't be any validation
+    scanf("%256[^\n]", bufferis);
+    c = getchar();
+    strcpy(user_data->e_mail, bufferis);
+    printf("Please enter your phone number in format +xxxxxxxxxxx\n");
+    scanf("%256[^\n]", bufferis);
+    c = getchar();
+    int is_phone_number_good=0;
+    while (bufferis[0]!='+'&&strlen(bufferis)!=12){
+        printf("Sorry, that was not correct phone number format\nPlease enter your phone number in format +xxxxxxxxxxx\n");
+        scanf("%256[^\n]", bufferis);
+        c = getchar();
+    }
+    strcpy(user_data->phone_number, bufferis);
+    //again, no regex, so there wont be any validation
+    printf("Please enter your LinkedIn profile link\n");
+    scanf("%256[^\n]", bufferis);
+    c = getchar();
+    strcpy(user_data->linkedIn_link, bufferis);
 }
 
 void create_section(Category ** categories, int *section_count, int *capacity)
@@ -146,4 +184,20 @@ void create_section(Category ** categories, int *section_count, int *capacity)
     }
     (*section_count)++;
     system("cls");
+}
+
+int num_validate() {
+	int check1 = 0, check2 = 1, num;
+	while (check1 < check2) {
+		if ((scanf("%d", &num) == 1 && num > 0 && num <=100 && getchar() == '\n')) {
+			check1++;
+		}
+		else {
+			printf("I dont believe, that your age is %d, please enter you age again\n", num);
+			while (getchar() != '\n') {
+				;
+			}
+		}
+	}
+	return num;
 }
