@@ -13,7 +13,7 @@ typedef struct
 {
     char name_surname[50];
     char birth_date[11]; //yyyy-mm-dd
-    int how_old;
+    int age;
     char e_mail[100];
     char phone_number[13]; //12 numbers +\n if we use +370 format
     char linkedIn_link[100];
@@ -151,7 +151,7 @@ void manage_main_info(Main_data *user_data)
     strcpy(user_data->birth_date, bufferis);
     printf("Please enter, how old are you\n");
     int number=num_validate();
-    user_data->how_old=number;
+    user_data->age=number;
     printf("Please enter your email\n"); //there is no regex in c (I think), so there won't be any validation
     scanf("%256[^\n]", bufferis);
     c = getchar();
@@ -338,7 +338,7 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fprintf(writeFile, "</head>\n");
     fprintf(writeFile, "<body>\n");
     fprintf(writeFile, "<h1>%s</h1>\n", main_data->name_surname);
-    fprintf(writeFile, "<h2>%s</h2>\n", main_data->email);
+    fprintf(writeFile, "<h2>%s</h2>\n", main_data->e_mail);
     fprintf(writeFile, "<h2>%d</h2>\n", main_data->age);
     fprintf(writeFile, "<h2>%s</h2>\n", main_data->phone_number);    
     for(int i = 0; i < section_count; i++)
