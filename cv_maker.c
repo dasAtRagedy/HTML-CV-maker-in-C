@@ -161,7 +161,7 @@ void manage_main_info(Main_data *user_data)
     scanf("%256[^\n]", bufferis);
     c = getchar();
     int is_phone_number_good=0;
-    while (bufferis[0]!='+'&&strlen(bufferis)!=12){
+    while (bufferis[0]!='+'||strlen(bufferis)!=12){
         printf("Sorry, that was not correct phone number format\nPlease enter your phone number in format +xxxxxxxxxxx\n");
         scanf("%256[^\n]", bufferis);
         c = getchar();
