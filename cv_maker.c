@@ -232,7 +232,7 @@ void view_sections(Category *categories, int section_count)
 {
     print_all_sections(categories, section_count);
     printf("Input anything to return: ");
-    scanf("%*d");
+    _getch();
     system("cls");
     fflush(stdin);
 }
@@ -349,6 +349,7 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fprintf(writeFile, "<h2>email: %s</h2>\n", main_data->e_mail);
     fprintf(writeFile, "<h2>age: %d</h2>\n", main_data->age);
     fprintf(writeFile, "<h2>number: %s</h2>\n", main_data->phone_number);
+    fprintf(writeFile, "<h2>LinkedIn: %s</h2>\n", main_data->linkedIn_link);
     for(int i = 0; i < section_count; i++)
     {
         fprintf(writeFile, "<hr>\n");
@@ -365,4 +366,6 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fclose(writeFile);
     printf("Saved, press any key to continue\n");
     _getch();
+    system("cls");
+    fflush(stdin);
 }
