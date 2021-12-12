@@ -336,10 +336,19 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fprintf(writeFile, "<title>%s</title>\n", main_data->name_surname);
     fprintf(writeFile, "</head>\n");
     fprintf(writeFile, "<body>\n");
-    fprintf(writeFile, "<h1>%s</h1>\n", main_data->name_surname);
+    for(int i = 0; i < section_count; i++)
+    {
+        fprintf(writeFile, "<h1>%s</h1>\n", categories[i].name);
+        fprintf(writeFile, "<p>");
+        for(int j = 0; j < 14; j++)
+        {   
+            fprintf(writeFile, "%s<br>\n", categories[i].html_text[j]);
+        }
+        fprintf(writeFile, "</p>\n");
+    }
     fprintf(writeFile, "</body>\n");
 
-    
+    fclose(writeFile);
     printf("Saved, press any key to continue\n");
     getchar();
 }
