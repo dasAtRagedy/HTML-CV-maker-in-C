@@ -355,5 +355,5 @@ void save(Main_data * main_data, Category *categories, int section_count)
 
     fclose(writeFile);
     printf("Saved, press any key to continue\n");
-    getchar();
+    _getch();
 }
