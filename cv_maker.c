@@ -33,7 +33,6 @@ enum options
 
 void printMainOptions();
 
-void initialize_html();
 void manage_main_info(Main_data *user_data);
 void create_section(Category **categories, int *section_count, int *capacity);
 
@@ -46,7 +45,7 @@ void swap_elements(Category **categories, int first, int second);
 void delete_section(Category **categories, int *section_count);
 void erase_element(Category **categories, int *section_count, int pos);
 
-void save(Category *categories, int section_count);
+void save(Main_data * main_data, Category *categories, int section_count);
 
 int num_validate();
 
@@ -90,6 +89,7 @@ int main()
             delete_section(&categories, &section_count);
             break;
         case SAVE:
+            save(&user_data, categories, section_count);
             break;
         case EXIT:
             break;
@@ -312,4 +312,34 @@ void erase_element(Category **categories, int *section_count, int pos)
         (*categories)[i] = (*categories)[i + 1];
     }
     (*section_count)--;
+}
+
+void save(Main_data * main_data, Category *categories, int section_count)
+{
+    char fileName[55];
+    printf("What should be the fileName(up to 50 symbols): \n");
+    scanf("%50[^\n]", fileName);
+    fflush(stdin);
+    
+    if(strstr(fileName, ".htm") == NULL || (strstr(fileName, ".htm") - fileName != 4) && (strstr(fileName, ".html") - fileName != 5))
+    {
+        strcat(fileName, ".html");
+    }
+    FILE *writeFile = fopen(fileName, "w");
+    if (writeFile == NULL)
+    {
+        printf("Error opening file: %s\n", fileName);
+        return;
+    }
+    fprintf(writeFile, "<!DOCTYPE html>\n");
+    fprintf(writeFile, "<head>\n");
+    fprintf(writeFile, "<title>%s</title>\n", main_data->name_surname);
+    fprintf(writeFile, "</head>\n");
+    fprintf(writeFile, "<body>\n");
+    fprintf(writeFile, "<h1>%s</h1>\n", main_data->name_surname);
+    fprintf(writeFile, "</body>\n");
+
+    
+    printf("Saved, press any key to continue\n");
+    getchar();
 }
