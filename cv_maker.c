@@ -192,6 +192,7 @@ void create_section(Category ** categories, int *section_count, int *capacity)
         scanf("%256[^\n]", (*categories)[*section_count].html_text[i]);
         scanf("%*[^\n]");
         getc(stdin);
+        categories[*section_count]->html_text_count++;
         if (strcmp((*categories)[*section_count].html_text[i], "N") == 0)
             break;
         if (i == 13)
@@ -343,6 +344,7 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fprintf(writeFile, "<h2>%s</h2>\n", main_data->phone_number);    
     for(int i = 0; i < section_count; i++)
     {
+        fprintf(writeFile, "<hr>\n");
         fprintf(writeFile, "<h1>%s</h1>\n", categories[i].name);
         fprintf(writeFile, "<p>");
         for(int j = 0; j < categories[i].html_text_count; j++)
