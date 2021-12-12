@@ -54,7 +54,7 @@ int num_validate();
 int main()
 {
     Category * categories = (Category *)malloc(sizeof(Category));
-    Main_data user_data;
+    Main_data user_data = {0};
     int section_count = 0;
     int capacity = 1;
     printf("Simple CV maker by: Denisas Savickis, Rytis Sapka, Simonas Jarukaitis, Deividas Baltuska\n");
@@ -210,6 +210,7 @@ void create_section(Category **categories, int *section_count, int *capacity)
         scanf("%256[^\n]", (*categories)[*section_count].html_text[i]);
         scanf("%*[^\n]");
         getc(stdin);
+        (*categories)[*section_count].html_text_count = i;
         if (strcmp((*categories)[*section_count].html_text[i], "N") == 0)
             break;
         if (i == 48)
@@ -346,14 +347,14 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fprintf(writeFile, "</head>\n");
     fprintf(writeFile, "<body>\n");
     fprintf(writeFile, "<h1>%s</h1>\n", main_data->name_surname);
-    fprintf(writeFile, "<h2>email: %s</h2>\n", main_data->e_mail);
-    fprintf(writeFile, "<h2>age: %d</h2>\n", main_data->age);
-    fprintf(writeFile, "<h2>number: %s</h2>\n", main_data->phone_number);
-    fprintf(writeFile, "<h2>LinkedIn: %s</h2>\n", main_data->linkedIn_link);
+    fprintf(writeFile, "<h4>email: %s</h4>\n", main_data->e_mail);
+    fprintf(writeFile, "<h4>age: %d</h4>\n", main_data->age);
+    fprintf(writeFile, "<h4>number: %s</h4>\n", main_data->phone_number);
+    fprintf(writeFile, "<h4>LinkedIn: %s</h4>\n", main_data->linkedIn_link);
     for(int i = 0; i < section_count; i++)
     {
         fprintf(writeFile, "<hr>\n");
-        fprintf(writeFile, "<h1>%s</h1>\n", categories[i].name);
+        fprintf(writeFile, "<h2>%s</h2>\n", categories[i].name);
         fprintf(writeFile, "<p>");
         for(int j = 0; j < categories[i].html_text_count; j++)
         {
