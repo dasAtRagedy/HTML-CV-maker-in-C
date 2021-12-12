@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct
 {
@@ -173,35 +174,6 @@ void manage_main_info(Main_data *user_data)
     strcpy(user_data->linkedIn_link, bufferis);
 }
 
-void create_section(Category ** categories, int *section_count, int *capacity)
-{
-    printf("Input the name of your section (up to 50 symbols): ");
-    if(*section_count == *capacity)
-    {
-        *capacity *= 2;
-        *categories = realloc(*categories, *capacity * sizeof(Category));
-    }
-    scanf("%50[^\n]", (*categories)[*section_count].name);
-    /* clear remaining symbols in line */
-    scanf("%*[^\n]");
-    getc(stdin);
-    for (int i = 0; i < 14; ++i)
-    {
-        printf("Input line %d of text (up to 256 symbols, 'N' to finish)\n: ", i + 1);
-        /* clear remaining symbols in line */
-        scanf("%256[^\n]", (*categories)[*section_count].html_text[i]);
-        scanf("%*[^\n]");
-        getc(stdin);
-        categories[*section_count]->html_text_count++;
-        if (strcmp((*categories)[*section_count].html_text[i], "N") == 0)
-            break;
-        if (i == 13)
-            strcpy( (*categories)[*section_count].html_text[i + 1], "N");
-    }
-    (*section_count)++;
-    system("cls");
-}
-
 int num_validate() {
 	int check1 = 0, check2 = 1, num;
 	while (check1 < check2) {
@@ -216,6 +188,35 @@ int num_validate() {
 		}
 	}
 	return num;
+}
+
+void create_section(Category **categories, int *section_count, int *capacity)
+{
+    //DADEDAMA VIETOS I DINAMINI MASYVA
+    printf("Input the name of your section (up to 50 symbols): ");
+    if(*section_count == *capacity)
+    {
+        *capacity *= 2;
+        *categories = realloc(*categories, *capacity * sizeof(Category));
+    }
+    //TODO: FIX SUS VALIDACIJA
+    scanf("%50[^\n]", (*categories)[*section_count].name);
+    scanf("%*[^\n]");
+    getc(stdin);
+    for (int i = 0; i < 49; ++i)
+    {
+        //TODO: FIX SUS VALIDACIJA
+        printf("Input line %d of text (up to 256 symbols, 'N' to finish)\n: ", i + 1);
+        scanf("%256[^\n]", (*categories)[*section_count].html_text[i]);
+        scanf("%*[^\n]");
+        getc(stdin);
+        if (strcmp((*categories)[*section_count].html_text[i], "N") == 0)
+            break;
+        if (i == 48)
+            strcpy( (*categories)[*section_count].html_text[i + 1], "N");
+    }
+    (*section_count)++;
+    system("cls");
 }
 
 //UTILITY
@@ -239,10 +240,10 @@ void view_sections(Category *categories, int section_count)
 void switch_section(Category **categories, int section_count)
 {
     int mem_one, mem_two;
-    int correct_input = 1;
+    bool correct_input = true;
     do
     {
-        correct_input = 1;
+        correct_input = true;
         print_all_sections(*categories, section_count);
         //TODO: FIX SUS VALIDACIJA
         printf("Input exactly 2 numbers seperated by a space - the id's of elements you wish to swap.\n");
@@ -250,7 +251,7 @@ void switch_section(Category **categories, int section_count)
         scanf("%d", &mem_one);
         if (getchar() != '\n' || mem_one <= 0 || mem_one > section_count)
         {
-            correct_input = 0;
+            correct_input = false;
         }
         if (correct_input)
         {
@@ -258,7 +259,7 @@ void switch_section(Category **categories, int section_count)
             scanf("%d", &mem_two);
             if (getchar() != '\n' || mem_two <= 0 || mem_two > section_count)
             {
-                correct_input = 0;
+                correct_input = false;
             }
         }
         system("cls");
@@ -284,17 +285,17 @@ void swap_elements(Category **categories, int first, int second)
 void delete_section(Category **categories, int *section_count)
 {
     int mem_one;
-    int correct_input = 1;
+    bool correct_input = true;
     do
     {
         //TODO: FIX SUS VALIDACIJA
-        correct_input = 1;
+        correct_input = true;
         print_all_sections(*categories, *section_count);
         printf("Input the id of section, that you wish to delete: ");
         scanf("%d", &mem_one);
         if (getchar() != '\n' || mem_one <= 0 || mem_one > section_count)
         {
-            correct_input = 0;
+            correct_input = false;
         }
         system("cls");
         if(!correct_input)
@@ -322,7 +323,7 @@ void save(Main_data * main_data, Category *categories, int section_count)
     printf("What should be the fileName(up to 50 symbols): \n");
     scanf("%50[^\n]", fileName);
     fflush(stdin);
-    
+
     if(strstr(fileName, ".htm") == NULL || (strstr(fileName, ".htm") - fileName != 4) && (strstr(fileName, ".html") - fileName != 5))
     {
         strcat(fileName, ".html");
@@ -347,14 +348,14 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fprintf(writeFile, "<h1>%s</h1>\n", main_data->name_surname);
     fprintf(writeFile, "<h2>email: %s</h2>\n", main_data->e_mail);
     fprintf(writeFile, "<h2>age: %d</h2>\n", main_data->age);
-    fprintf(writeFile, "<h2>number: %s</h2>\n", main_data->phone_number);    
+    fprintf(writeFile, "<h2>number: %s</h2>\n", main_data->phone_number);
     for(int i = 0; i < section_count; i++)
     {
         fprintf(writeFile, "<hr>\n");
         fprintf(writeFile, "<h1>%s</h1>\n", categories[i].name);
         fprintf(writeFile, "<p>");
         for(int j = 0; j < categories[i].html_text_count; j++)
-        {   
+        {
             fprintf(writeFile, "%s<br>\n", categories[i].html_text[j]);
         }
         fprintf(writeFile, "</p>\n");
