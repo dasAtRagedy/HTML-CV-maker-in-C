@@ -336,12 +336,18 @@ void save(Main_data * main_data, Category *categories, int section_count)
     fprintf(writeFile, "<!DOCTYPE html>\n");
     fprintf(writeFile, "<head>\n");
     fprintf(writeFile, "<title>%s</title>\n", main_data->name_surname);
+    fprintf(writeFile, "<style>\n");
+    fprintf(writeFile, "@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');\n");
+    fprintf(writeFile, "body {\n");
+    fprintf(writeFile, "   font-family: 'Roboto', sans-serif;\n");
+    fprintf(writeFile, "}\n");
+    fprintf(writeFile, "</style>\n");
     fprintf(writeFile, "</head>\n");
     fprintf(writeFile, "<body>\n");
     fprintf(writeFile, "<h1>%s</h1>\n", main_data->name_surname);
-    fprintf(writeFile, "<h2>%s</h2>\n", main_data->e_mail);
-    fprintf(writeFile, "<h2>%d</h2>\n", main_data->age);
-    fprintf(writeFile, "<h2>%s</h2>\n", main_data->phone_number);    
+    fprintf(writeFile, "<h2>email: %s</h2>\n", main_data->e_mail);
+    fprintf(writeFile, "<h2>age: %d</h2>\n", main_data->age);
+    fprintf(writeFile, "<h2>number: %s</h2>\n", main_data->phone_number);    
     for(int i = 0; i < section_count; i++)
     {
         fprintf(writeFile, "<hr>\n");
