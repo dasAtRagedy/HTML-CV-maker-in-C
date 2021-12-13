@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 typedef struct
 {
@@ -50,6 +51,9 @@ void erase_element(Category **categories, int *section_count, int pos);
 void save(Main_data * main_data, Category *categories, int section_count);
 
 int num_validate();
+int input_integer_bounds(int a, int b);
+int is_valid_number(char *str);
+
 
 int main()
 {
@@ -105,6 +109,20 @@ int main()
     return 0;
 }
 
+void remove_html_tags(char *str){
+    int len = strlen(str);
+    for(int i = 0; i < len; i++){
+        if(str[i] == '<' || str[i] == '>'){
+            for(int j = i; j < len; j++){
+                str[j] = str[j+1];
+            }
+            str[len-1] = ' ';
+            i--;
+            len--;
+        }
+    }
+}
+
 void printMainOptions()
 {
     printf("%d) %s\n", MAIN_INFO, "Fill out your main information");
@@ -120,16 +138,19 @@ void printMainOptions()
 void manage_main_info(Main_data *user_data)
 {
     char bufferis[257];
+
     printf("Please enter your name, surname and second name up to 50 symbols, if you have one\n");
     scanf("%256[^\n]", bufferis);
     char c;
     c = getchar();
+    remove_html_tags(bufferis); //Hopefully just a temporary fix
     while (strlen(bufferis)>50){
         printf("sorry, I expected at most 50 symbols.\nPlease enter your name and surname again\n");
         scanf("%256[^\n]", bufferis);
         c = getchar();
     }
     strcpy(user_data->name_surname, bufferis);
+
     printf("Please enter your birth date in yyyy-mm-dd format\n");
     scanf("%256[^\n]", bufferis);
     c = getchar();
@@ -150,44 +171,49 @@ void manage_main_info(Main_data *user_data)
         }
     }
     strcpy(user_data->birth_date, bufferis);
-    printf("Please enter, how old are you\n");
-    int number=num_validate();
+
+    printf("Please enter your age\n");
+    int number = input_integer_bounds(8, 100);
     user_data->age=number;
-    printf("Please enter your email\n"); //there is no regex in c (I think), so there won't be any validation
-    scanf("%256[^\n]", bufferis);
+
+    printf("Please enter your email\n");
+    scanf("%256[^\n]", bufferis); //TODO: Add REGEX validation
     c = getchar();
+    remove_html_tags(bufferis);
     strcpy(user_data->e_mail, bufferis);
+
     printf("Please enter your phone number in format +xxxxxxxxxxx\n");
     scanf("%256[^\n]", bufferis);
     c = getchar();
+    remove_html_tags(bufferis);
     int is_phone_number_good=0;
     while (bufferis[0]!='+'||strlen(bufferis)!=12){
         printf("Sorry, that was not correct phone number format\nPlease enter your phone number in format +xxxxxxxxxxx\n");
         scanf("%256[^\n]", bufferis);
         c = getchar();
+        remove_html_tags(bufferis);
     }
     strcpy(user_data->phone_number, bufferis);
-    //again, no regex, so there wont be any validation
+    //TODO: Add REGEX validation
     printf("Please enter your LinkedIn profile link\n");
     scanf("%256[^\n]", bufferis);
     c = getchar();
+    remove_html_tags(bufferis);
     strcpy(user_data->linkedIn_link, bufferis);
 }
 
-int num_validate() {
-	int check1 = 0, check2 = 1, num;
-	while (check1 < check2) {
-		if ((scanf("%d", &num) == 1 && num > 0 && num <=100 && getchar() == '\n')) {
-			check1++;
-		}
-		else {
-			printf("I dont believe, that your age is %d, please enter you age again\n", num);
-			while (getchar() != '\n') {
-				;
-			}
-		}
-	}
-	return num;
+int input_integer_bounds(int a, int b){
+    int x;
+    if((scanf("%d", &x) == 1) && a <= x && x <= b && isspace(getchar())){
+        printf("Input accepted.\n");
+        return x;
+    }
+    else{
+        printf("Input invalid, please enter one integer between %d and %d\n", a, b);
+        while(!isspace(getchar()))
+            continue;
+        return input_integer_bounds(a, b);
+    }
 }
 
 void create_section(Category **categories, int *section_count, int *capacity)
@@ -203,6 +229,7 @@ void create_section(Category **categories, int *section_count, int *capacity)
     scanf("%50[^\n]", (*categories)[*section_count].name);
     scanf("%*[^\n]");
     getc(stdin);
+    remove_html_tags((*categories)[*section_count].name);
     for (int i = 0; i < 49; ++i)
     {
         //TODO: FIX SUS VALIDACIJA
@@ -211,6 +238,7 @@ void create_section(Category **categories, int *section_count, int *capacity)
         scanf("%*[^\n]");
         getc(stdin);
         (*categories)[*section_count].html_text_count = i;
+        remove_html_tags((*categories)[*section_count].html_text[i]);
         if (strcmp((*categories)[*section_count].html_text[i], "N") == 0)
             break;
         if (i == 48)
