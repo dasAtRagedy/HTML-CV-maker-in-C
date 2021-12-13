@@ -32,8 +32,6 @@ enum options
     EXIT
 };
 
-
-
 void printMainOptions();
 
 void manage_main_info(Main_data *user_data);
@@ -52,7 +50,7 @@ void save(Main_data * main_data, Category *categories, int section_count);
 
 int num_validate();
 int input_integer_bounds(int a, int b);
-int is_valid_number(char *str);
+int is_valid_number(char *str, int a, int b);
 
 
 int main()
@@ -182,12 +180,12 @@ void manage_main_info(Main_data *user_data)
     remove_html_tags(bufferis);
     strcpy(user_data->e_mail, bufferis);
 
-    printf("Please enter your phone number in format +xxxxxxxxxxx\n");
+    printf("Please enter your phone number in format +xxxxxxxxxxx (11 digits)\n");
     scanf("%256[^\n]", bufferis);
     c = getchar();
     remove_html_tags(bufferis);
     int is_phone_number_good=0;
-    while (bufferis[0]!='+'||strlen(bufferis)!=12){
+    while (bufferis[0]!='+' || !is_valid_number(bufferis, 1, 12)){
         printf("Sorry, that was not correct phone number format\nPlease enter your phone number in format +xxxxxxxxxxx\n");
         scanf("%256[^\n]", bufferis);
         c = getchar();
@@ -214,6 +212,15 @@ int input_integer_bounds(int a, int b){
             continue;
         return input_integer_bounds(a, b);
     }
+}
+
+int is_valid_number(char *str, int a, int b){
+    for(int i = a; i < b; i++){
+        if(!isdigit(str[i])){
+            return 0;
+        }
+    }
+    return 1;
 }
 
 void create_section(Category **categories, int *section_count, int *capacity)
@@ -349,7 +356,7 @@ void erase_element(Category **categories, int *section_count, int pos)
 void save(Main_data * main_data, Category *categories, int section_count)
 {
     char fileName[55];
-    printf("What should be the fileName(up to 50 symbols): \n");
+    printf("What should be the fileName(up to 50 symbols, [name].html): \n");
     scanf("%50[^\n]", fileName);
     fflush(stdin);
 
